@@ -17,7 +17,7 @@ class TransactionList extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.indigo, width: 3),
+              border: Border.all(color: Theme.of(context).primaryColor, width: 3),
               borderRadius: BorderRadius.all(Radius.circular(5)),
             ),
             padding: EdgeInsets.all(10),
