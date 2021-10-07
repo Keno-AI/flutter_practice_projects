@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+
 
 class NewTransaction extends StatefulWidget {
   final Function addTx;
@@ -12,18 +14,38 @@ class NewTransaction extends StatefulWidget {
 
 class _NewTransactionState extends State<NewTransaction> {
   final titleController = TextEditingController();
-
   final amountController = TextEditingController();
+  DateTime date;
 
   void submitData() {
+    if(amountController.text.isEmpty){
+      return;
+    }
     String title = titleController.text;
     double amount = double.parse(amountController.text);
 
-    if (title.isEmpty || amount <= 0) {
+    if (title.isEmpty || amount <= 0 || date == null) {
       return;
     }
-    widget.addTx(title, amount);
-     Navigator.of(context).pop();
+    widget.addTx(title, amount,date);
+    Navigator.of(context).pop();
+  }
+
+  void datePicker() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2019),
+            lastDate: DateTime.now())
+        .then((value) {
+          if(value == null){
+            return;
+          }
+          setState(() {
+             date = value;
+          });
+         
+        });
   }
 
   @override
@@ -47,6 +69,21 @@ class _NewTransactionState extends State<NewTransaction> {
                 controller: amountController,
                 keyboardType: TextInputType.number,
                 onSubmitted: (_) => submitData(),
+              ),
+              Container(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(child: Text('Date: ${date == null ? 'No date chosen' : DateFormat.yMMMd().format(date)} ')),
+                    FlatButton(
+                        onPressed: datePicker,
+                        child: Text('Choose date',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15))),
+                  ],
+                ),
               ),
               RaisedButton(
                 child: Text('Submit'),

@@ -37,15 +37,21 @@ class _MyHomePageState extends State<MyHomePage> {
         id: "id2", title: "QR jeans", amount: 48.35, date: DateTime.now().subtract(Duration(days:2))),
   ];
 
-  void addTx(String inputTitle, double inputAmount) {
+  void addTx(String inputTitle, double inputAmount, DateTime date  ) {
     final newTx = Transaction(
         id: DateTime.now().toString(),
         title: inputTitle,
         amount: inputAmount,
-        date: DateTime.now());
+        date: date);
 
     setState(() {
       user_transactions.add(newTx);
+    });
+  }
+
+  void deleteTx(String idTx){
+    setState(() {
+      user_transactions.removeWhere((element) => element.id == idTx);
     });
   }
 
@@ -61,8 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
+    final appBar = AppBar(
           title: Text('Expenses App'),
           centerTitle: true,
           actions: <Widget>[
@@ -73,8 +78,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 icon: Icon(
                   Icons.add_box,
                 ))
-          ],
-        ),
+          ],);
+    return Scaffold(
+        appBar: appBar,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -85,34 +91,12 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.white,
           ),
         ),
-        body: ListView(children: [
-          Chart(user_transactions),
-          user_transactions.isEmpty
-              ? Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.symmetric(vertical: 30),
-                  child: Column(
-                    children: [
-                      Text(
-                        'No expenses added yet!',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                          height: 100,
-                          child: Image(
-                            image: AssetImage('assets/images/waiting.png'),
-                            fit: BoxFit.cover,
-                          ))
-                    ],
-                  ),
-                )
-              :  TransactionList(user_transactions),
-        ]));
+        body: Container(
+          height: (MediaQuery.of(context).size.height  - appBar.preferredSize.height - MediaQuery.of(context).padding.top),
+          child: Column(children: [
+            Container(height: (MediaQuery.of(context).size.height  - appBar.preferredSize.height - MediaQuery.of(context).padding.top)* 0.3, child: Chart(user_transactions)),
+            Container(height: (MediaQuery.of(context).size.height  - appBar.preferredSize.height - MediaQuery.of(context).padding.top)* 0.7,child: TransactionList(user_transactions,deleteTx)),
+          ]),
+        ));
   }
 }
