@@ -11,30 +11,36 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transactions.isEmpty
-        ? Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(vertical: 30),
+        ? LayoutBuilder(builder: (ctx,constraints){
+          
+          return Container(
+            width: constraints.maxWidth,
+            height: constraints.maxHeight ,
             child: Column(
-              children: [
-                Text(
-                  'No expenses added yet!',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                    height: 100,
-                    child: Image(
-                      image: AssetImage('assets/images/waiting.png'),
-                      fit: BoxFit.cover,
-                    ))
-              ],
-            ),
-          )
+                children: [
+                  Container(
+                    height: constraints.maxHeight *0.15,
+                    child: Text(
+                      'No expenses added yet!',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor),
+                    ),
+                  ),
+                  SizedBox(
+                    height: constraints.maxHeight *0.05  ,
+                  ),
+                  Container(
+                      height: constraints.maxHeight *0.8,
+                      child: Image(
+                        image: AssetImage('assets/images/waiting.png'),
+                        fit: BoxFit.cover,
+                      ))
+                ],
+              ),
+          );
+        })        
         : ListView(
                 children: transactions.map((tx) {
               return Card(
@@ -51,7 +57,8 @@ class TransactionList extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                   subtitle: Text(DateFormat.yMMMd().format(tx.date)),
-                  trailing: IconButton(onPressed: () => deleteTransaction(tx.id), icon: Icon(Icons.delete), ),
+                  trailing: MediaQuery.of(context).size.width > 450 ? FlatButton.icon(onPressed: () => deleteTransaction(tx.id), icon: Icon(Icons.delete), label: Text('Delete'),textColor: Colors.red,):
+                  IconButton(onPressed: () => deleteTransaction(tx.id), icon: Icon(Icons.delete),color: Colors.red, ),
                 ),
               );
             }).toList());

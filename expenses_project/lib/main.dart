@@ -1,11 +1,19 @@
 import 'package:expenses_project/widgets/new_transactions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../widgets/transaction_list.dart';
 import '../widgets/new_transactions.dart';
 import '../widgets/chart.dart';
 import '../models/transaction.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitDown,
+  //   DeviceOrientation.portraitUp
+  // ]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -26,18 +34,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool switchV = true;
   final List<Transaction> user_transactions = [
     Transaction(
         id: "id1",
         title: "Puma Rebound Joy",
         amount: 98.63,
-        date: DateTime.now().subtract(Duration(days:1))
-        ),
+        date: DateTime.now().subtract(Duration(days: 1))),
     Transaction(
-        id: "id2", title: "QR jeans", amount: 48.35, date: DateTime.now().subtract(Duration(days:2))),
+        id: "id2",
+        title: "QR jeans",
+        amount: 48.35,
+        date: DateTime.now().subtract(Duration(days: 2))),
   ];
 
-  void addTx(String inputTitle, double inputAmount, DateTime date  ) {
+  void addTx(String inputTitle, double inputAmount, DateTime date) {
     final newTx = Transaction(
         id: DateTime.now().toString(),
         title: inputTitle,
@@ -49,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void deleteTx(String idTx){
+  void deleteTx(String idTx) {
     setState(() {
       user_transactions.removeWhere((element) => element.id == idTx);
     });
@@ -67,18 +78,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final appBar = AppBar(
-          title: Text('Expenses App'),
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-                onPressed: () {
-                  startAddNewTransaction(context);
-                },
-                icon: Icon(
-                  Icons.add_box,
-                ))
-          ],);
+      title: Text('Expenses App'),
+      centerTitle: true,
+      actions: <Widget>[
+        IconButton(
+            onPressed: () {
+              startAddNewTransaction(context);
+            },
+            icon: Icon(
+              Icons.add_box,
+            ))
+      ],
+    );
     return Scaffold(
         appBar: appBar,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -92,10 +106,58 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         body: Container(
-          height: (MediaQuery.of(context).size.height  - appBar.preferredSize.height - MediaQuery.of(context).padding.top),
+          //Body starts here
+          height: (MediaQuery.of(context).size.height -
+              appBar.preferredSize.height -
+              MediaQuery.of(context).padding.top),
           child: Column(children: [
-            Container(height: (MediaQuery.of(context).size.height  - appBar.preferredSize.height - MediaQuery.of(context).padding.top)* 0.3, child: Chart(user_transactions)),
-            Container(height: (MediaQuery.of(context).size.height  - appBar.preferredSize.height - MediaQuery.of(context).padding.top)* 0.7,child: TransactionList(user_transactions,deleteTx)),
+            if (isLandscape)
+              Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.05,
+                child: Row(
+                  children: [
+                    Text('Show chart'),
+                    Switch(
+                        value: switchV,
+                        onChanged: (val) {
+                          setState(() {
+                            switchV = val;
+                          });
+                        })
+                  ],
+                ),
+              ),
+            if (!isLandscape)
+              Container(
+                  height: (MediaQuery.of(context).size.height -
+                          appBar.preferredSize.height -
+                          MediaQuery.of(context).padding.top) *
+                      0.3,
+                  child: Chart(user_transactions)),
+            if (!isLandscape)
+              Container(
+                  height: (MediaQuery.of(context).size.height -
+                          appBar.preferredSize.height -
+                          MediaQuery.of(context).padding.top) *
+                      0.7,
+                  child: TransactionList(user_transactions, deleteTx)),
+            if (isLandscape && switchV)
+              Container(
+                  height: (MediaQuery.of(context).size.height -
+                          appBar.preferredSize.height -
+                          MediaQuery.of(context).padding.top) *
+                      0.8,
+                  child: Chart(user_transactions)),
+            if (isLandscape && !switchV)
+              Container(
+                  height: (MediaQuery.of(context).size.height -
+                          appBar.preferredSize.height -
+                          MediaQuery.of(context).padding.top) *
+                      0.95,
+                  child: TransactionList(user_transactions, deleteTx)),
           ]),
         ));
   }
