@@ -1,6 +1,5 @@
 import 'package:expenses_project/widgets/new_transactions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../widgets/transaction_list.dart';
 import '../widgets/new_transactions.dart';
 import '../widgets/chart.dart';
@@ -22,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter App',
       home: MyHomePage(),
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.indigo,
       ),
     );
   }
