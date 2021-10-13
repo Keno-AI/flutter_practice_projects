@@ -2,19 +2,37 @@ import 'package:flutter/material.dart';
 import '../models/meal.dart';
 import '../dummy_data.dart';
 
-class MaealDetailScreen extends StatelessWidget {
+class MaealDetailScreen extends StatefulWidget {
   static const routeName = '/meal-detail';
+  final Function selectedFavourite;
+  final Function isfavourite;
+
+  MaealDetailScreen(this.selectedFavourite, this.isfavourite);
+
+  @override
+  State<MaealDetailScreen> createState() => _MaealDetailScreenState();
+}
+
+class _MaealDetailScreenState extends State<MaealDetailScreen> {
+  
 
   @override
   Widget build(BuildContext context) {
     final mealId = ModalRoute.of(context).settings.arguments as String;
     final thisMeal = DUMMY_MEALS.firstWhere((meal) => mealId == meal.id);
-
+    
+   
     return Scaffold(
         appBar: AppBar(title: Text(thisMeal.title)),
         floatingActionButton: FloatingActionButton(onPressed: (){
-                Navigator.of(context).pop(mealId);
-              }, child: Icon(Icons.delete),backgroundColor: Colors.red,),
+          setState(() {
+             widget.selectedFavourite(mealId);
+          });
+               
+        }
+               // Navigator.of(context).pop(mealId);
+              , child: Icon(widget.isfavourite(mealId) ? Icons.star : Icons.star_outline),backgroundColor: Colors.blue,),
+              
         body: SingleChildScrollView(
           child: Column(
             children: [

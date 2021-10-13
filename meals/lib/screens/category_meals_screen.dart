@@ -20,12 +20,12 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
   String categoryTitle;
   List<Meal> filteredMeals;
 
-  void removeMeal (String mealId){
-    setState(() {
-      filteredMeals.removeWhere((meal) => mealId == meal.id);
-    });
+  // void removeMeal (String mealId){
+  //   setState(() {
+  //     filteredMeals.removeWhere((meal) => mealId == meal.id);
+  //   });
     
-  }
+  // }
 
   @override
   void didChangeDependencies() {
@@ -55,8 +55,8 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
                 filteredMeals[index].title,
                  filteredMeals[index].duration,
                 filteredMeals[index].complexity,
-                filteredMeals[index].affordability,
-                removeMeal);
+                filteredMeals[index].affordability
+            );
           },
           itemCount: filteredMeals.length,
         ),
