@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:lamoda_junior/screens/product_detail_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/product.dart';
+import '../providers/cart.dart';
 
 class ProductItem extends StatelessWidget {
   // final String id;
@@ -14,11 +15,13 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context);
+    final product = Provider.of<Product>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: false);
     return GridTile(
       child: GestureDetector(
-        onTap: (){
-          Navigator.of(context).pushNamed(ProductDetailScreen.routeName, arguments: product.id);
+        onTap: () {
+          Navigator.of(context)
+              .pushNamed(ProductDetailScreen.routeName, arguments: product.id);
         },
         child: Image.network(
           product.imageUrl,
@@ -26,26 +29,46 @@ class ProductItem extends StatelessWidget {
         ),
       ),
       header: GridTileBar(
-        title: SizedBox(width: 10,),
-        leading:
-            IconButton(onPressed: () {product.toggleFavorite();}, icon: Icon(product.isFavourite ? Icons.favorite : Icons.favorite_border_outlined),color:  Colors.redAccent,),
+        title: SizedBox(
+          width: 10,
+        ),
+        leading: Consumer<Product>(
+          builder: (ctx, product, _) => IconButton(
+            onPressed: () {
+              product.toggleFavorite();
+            },
+            icon: product.isFavourite
+                ? Icon(
+                    Icons.favorite,
+                    color: Colors.red,
+                  )
+                : Icon(
+                    Icons.favorite_border_outlined,
+                    color: Colors.blueGrey,
+                  ),
+          ),
+        ),
         //backgroundColor: Colors.black54,
-        trailing: IconButton(
-            onPressed: () {}, icon: Icon(Icons.shopping_bag_outlined,color: Colors.blueGrey)), 
+        trailing:  IconButton(
+            onPressed: () {
+              cart.addItem(product.id, product.title, product.price);
+            },
+            icon: Icon(Icons.shopping_bag_outlined, color: Colors.blueGrey),
+          ),
+        
       ),
       footer: GridTileBar(
-        title: Column(
-          children: [
-            Container(
-                padding: EdgeInsets.all(3),
-                child: Text('${product.price} ' +
-                    NumberFormat.simpleCurrency(locale: 'kk_KZ')
-                        .currencySymbol)),
-            Container(padding: EdgeInsets.all(3), child: Text(product.title)),
-          ],
-        ),
-        backgroundColor: Colors.black54
-      ),
+          title: Column(
+            children: [
+              Container(
+                  padding: EdgeInsets.all(3),
+                  child: Text('${product.price} ' +
+                      NumberFormat.simpleCurrency(locale: 'kk_KZ')
+                          .currencySymbol)),
+              Container(padding: EdgeInsets.all(3), child: Text(product.title)),
+            ],
+          ),
+          backgroundColor: Colors.black54),
     );
   }
 }
