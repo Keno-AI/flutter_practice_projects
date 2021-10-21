@@ -8,6 +8,7 @@ import '../providers/cart.dart';
 // import '../data.dart';
 import '../widgets/products_grid_view.dart';
 import '../screens/cart_screen.dart';
+import '../widgets/app_drawer.dart';
 
 enum FilterOptions {
   Favorites,
@@ -29,6 +30,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
 
     return Scaffold(
         appBar: AppBar(
+          
           title: Text('Men clothes'),
           backgroundColor: Theme.of(context).primaryColor,
           actions: <Widget>[
@@ -69,6 +71,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             ),
           ],
         ),
+        drawer: AppDrawer(),
         body: ProductGridView(showFavourite));
   }
 }
