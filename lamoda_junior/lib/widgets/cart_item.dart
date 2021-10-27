@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
 
-
-
 class CartItem extends StatelessWidget {
   final String id;
   final String productId;
@@ -39,8 +37,28 @@ class CartItem extends StatelessWidget {
         ),
       ),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) {
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text("Are you sure you want to delete this item? "),
+            actions: [
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text("Yes")),
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text("No"))
+            ],
+          ),
+        );
+      },
       onDismissed: (direction) {
-       Provider.of<Cart>(context, listen: false).removeItem(productId);
+        Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
       child: Card(
         margin: EdgeInsets.symmetric(
