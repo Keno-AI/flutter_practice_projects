@@ -25,7 +25,7 @@ class UserProductsScreen extends StatelessWidget {
           return Card(
               elevation: 6,
               child: UserProductItem(userProducts.items[index].imageUrl,
-                  userProducts.items[index].title));
+                  userProducts.items[index].title, userProducts.items[index].id));
         },
         itemCount: userProducts.items.length,
       ),
