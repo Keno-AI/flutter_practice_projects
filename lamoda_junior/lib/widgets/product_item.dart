@@ -34,11 +34,9 @@ class ProductItem extends StatelessWidget {
         ),
         leading: Consumer<Product>(
           builder: (ctx, product, _) => IconButton(
-            onPressed: () {
-              product.toggleFavorite();
-            },
+            
             icon: product.isFavourite
-                ? Icon(
+                 ? Icon(
                     Icons.favorite,
                     color: Colors.red,
                   )
@@ -46,9 +44,11 @@ class ProductItem extends StatelessWidget {
                     Icons.favorite_border_outlined,
                     color: Colors.blueGrey,
                   ),
+                  onPressed: () {
+              product.toggleFavorite();
+            },
           ),
         ),
-        //backgroundColor: Colors.black54,
         trailing: IconButton(
           onPressed: () {
             cart.addItem(product.id, product.title, product.price);

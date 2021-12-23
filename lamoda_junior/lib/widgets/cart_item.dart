@@ -41,7 +41,7 @@ class CartItem extends StatelessWidget {
         return showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text("Are you sure you want to delete this item? "),
+            title: Text("Are you sure  you want to delete this item? "),
             actions: [
               FlatButton(
                   onPressed: () {

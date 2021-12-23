@@ -4,11 +4,12 @@ import 'package:provider/provider.dart';
 import '../providers/cart.dart';
 // import 'package:provider/provider.dart';
 // import '../models/product.dart';
-// // import '../providers/products.dart';
+import '../providers/products.dart';
 // import '../data.dart';
 import '../widgets/products_grid_view.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/app_drawer.dart';
+import 'package:provider/provider.dart';
 
 enum FilterOptions {
   Favorites,
@@ -22,17 +23,29 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var showFavourite = false;
+  var isInit = true;
+
+  @override
+  Future<void> didChangeDependencies() async{
+    if(isInit){
+      await Provider.of<Products>(context).fetchData();
+    }
+    isInit = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
     // final productsData = Provider.of<Products>(context);
     // final products = productsData.items;
 
+    
+
     return Scaffold(
         appBar: AppBar(
           
           title: Text('Men clothes'),
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Colors.blueGrey,
           actions: <Widget>[
             PopupMenuButton(
                 onSelected: (FilterOptions selectedValue) {
